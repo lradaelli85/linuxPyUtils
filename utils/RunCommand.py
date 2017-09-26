@@ -33,22 +33,22 @@ class Command:
                     except:
                         exit_status = exc_info()[1]
                 elif counter > 0 and counter < len(cmd):
-                    if not OnlyOutPut:
+                    if counter == len(cmd)-1 and OnlyOutPut:
+                                 try:
+                                     output_ret = subprocess.check_output(split(cmd_splitted),
+                                                   stdin=proc[counter-1].stdout,stderr=subprocess.PIPE)
+                                 except:
+                                     output_ret =  exc_info()[1]
+                    else:
                         try:
                             proc[counter] = subprocess.Popen(split(cmd_splitted),
-                                        stdin=proc[counter-1].stdout,stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
+                                stdin=proc[counter-1].stdout,stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
                         except:
                             if len(proc) > 0:
                                 proc[0].stdout.close()
                                 proc[0].wait()
-                                exit_status = exc_info()[1]
-                    else:
-                        try:
-                            output_ret = subprocess.check_output(split(cmd_splitted),
-                                        stdin=proc[counter-1].stdout,stderr=subprocess.PIPE)
-                        except:
-                            output_ret =  exc_info()[1]
+                            exit_status = exc_info()[1]
                 counter +=1
             try:
                 # communicate() returns a tuple (stdoutdata, stderrdata)

@@ -12,7 +12,7 @@ class apyt():
 
     def search_in_repo(self,package):
         '''Search for the exact package match in repo (Debian based distro)'''
-        return Command("/usr/bin/apt-cache search -n  -q {} |awk '($1==\"{}\")'".format(package,package)).run(OnlyOutPut=True)
+        return Command("/usr/bin/apt-cache search -n -q {} |awk '($1==\"{}\")'|wc -l".format(package,package)).run(OnlyOutPut=True)
 
     def check_if_deb_is_installed(self,package):
         '''Search if a package is installed (Debian based distro)'''
