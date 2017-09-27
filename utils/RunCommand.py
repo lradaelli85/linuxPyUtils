@@ -67,10 +67,10 @@ class Command:
                     exit_status = exc_info()[1]
             else:
                 try:
-                    output_ret = subprocess.check_output(split(self.command),stdin=None,stderr=subprocess.PIPE)
-                except:
-                    output_ret = exc_info()[1]
+                    output_ret = subprocess.check_output(split(self.command),stderr=subprocess.PIPE)
+                except subprocess.CalledProcessError as e:
+                    output_ret = e
         if OnlyOutPut:
             return output_ret
         else:
-            return exit_status
+            return output,exit_status

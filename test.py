@@ -22,20 +22,28 @@ if __name__ == "__main__":
     pack='vimsdf'
     a = apyt()
     b = LinuxOsUtils()
-    print 'whoami',b.who_am_i()
-    print 'linux_arch',b.get_linux_arch()
-    print 'linux_distro',b.get_linux_distro()
-    print 'list dir',b.list_dir_objects('a')
+    # print 'whoami',b.am_i_root()
+    # print 'linux_arch',b.get_linux_arch()
+    # print 'linux_distro',b.get_linux_distro()
+    # print 'list dir',b.list_dir_objects('/home/luke')
 
-    uno = a.search_in_repo(pack)
-    if uno:
-        print pack,' present in repo'
+    # uno = a.search_in_repo(pack)
+    # if uno:
+    #     print pack,' present in repo'
+    # else:
+    #     print pack,' is not present in repo'
+    # due = a.check_if_deb_is_installed(pack)
+    # if due == True:
+    #     print pack,' is installed'
+    # elif due == 'Half':
+    #     print pack,' has been removed but config files exist'
+    # else:
+    #     print pack,' is not installed'
+    tre = b.search_in_file('luke', '/etc/passwd')
+    print tre
+    quattro = b.search_pattern_in_folder('lukes','/etcs/')
+    if type(quattro) is bool:
+        print quattro
     else:
-        print pack,' is not present in repo'
-    due = a.check_if_deb_is_installed(pack)
-    if due == True:
-        print pack,' is installed'
-    elif due == 'Half':
-        print pack,' has been removed but config files exist'
-    else:
-        print pack,' is not installed'
+        print type(quattro)
+        print quattro[1]

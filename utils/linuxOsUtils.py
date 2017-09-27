@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-.
 from os import getuid,path,listdir
 from platform import architecture,linux_distribution
+from RunCommand import Command
 
 
 class LinuxOsUtils():
@@ -10,7 +11,9 @@ class LinuxOsUtils():
         pass
 
     def am_i_root(self):
-        '''check if user is root or not'''
+        '''check if user is root or not.
+           return false if it is not root,otherwsie return true
+        '''
         if getuid() != 0:
             return False
         else:
@@ -25,22 +28,26 @@ class LinuxOsUtils():
         return architecture()
 
     def file_exists(self,obj):
-        '''check if a file exist'''
+        '''check if a file exist
+           return true if file exists otherwise return false
+        '''
         if path.isfile(obj):
             return True
         else:
             return False
 
     def list_dir_objects(self,folder):
-        '''list objects in a folder'''
+        '''list objects in a folder
+           if an exception is raised a tuple is returned (False,error message),
+           otherwise return the objects in the folder
+        '''
         try:
             dir_obj = listdir(folder)
         except OSError as err:
-            print err
-            return False
+            return False,err
         return dir_obj
 
-    def add_repo(repofile,repo):
+    def add_repo(self,repofile,repo):
         '''add a linux APT reportsitory'''
         if self.file_exists(repofile):
             try:
@@ -62,6 +69,34 @@ class LinuxOsUtils():
             except IOError as error:
                 print error
 
-    def add_apt_key(keyserver,key):
+    def add_apt_key(self,keyserver,key):
         '''add an APT gpg key from from keyservers'''
         return Command('/usr/bin/apt-key adv --keyserver {} --recv-keys {}'.format(keyserver,key)).run()
+
+    def search_in_file(self,pattern,file_path):
+        '''search for a pattern in a file
+           return True if pattern is found otherwise return False.
+           If an error occurred  a tuple is returned (False,error message)
+        '''
+        pattern_exist = Command('grep {} {}'.format(pattern,file_path)).run()
+        if pattern_exist[1] == 0:
+            return True
+        else:
+            if pattern_exist[0][1]:
+                return False, pattern_exist[0][1]
+            else:
+                return False
+
+    def search_pattern_in_folder(self,pattern,folder_path):
+        '''search for a pattern in a folder
+           return True if pattern is found otherwise return False
+           If an error occurred  a tuple is returned (False,error message)
+        '''
+        pattern_exist = Command('grep -r {} {}'.format(pattern,folder_path)).run()
+        if pattern_exist[1] == 0:
+            return True
+        else:
+            if pattern_exist[0][1]:
+                return False, pattern_exist[0][1]
+            else:
+                return False
