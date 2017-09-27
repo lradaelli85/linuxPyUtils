@@ -9,7 +9,7 @@ class LinuxOsUtils():
     def __init__(self):
         pass
 
-    def who_am_i(self):
+    def am_i_root(self):
         '''check if user is root or not'''
         if getuid() != 0:
             return False
