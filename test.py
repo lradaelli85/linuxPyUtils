@@ -4,6 +4,7 @@
 #import subprocess
 #import shlex
 from utils.Apyt import apyt
+from utils.linuxOsUtils import LinuxOsUtils
 
 if __name__ == "__main__":
     #cmd1 = shlex.split('/usr/bin/apt-cache search -n -q vima')
@@ -20,6 +21,12 @@ if __name__ == "__main__":
 
     pack='vimsdf'
     a = apyt()
+    b = LinuxOsUtils()
+    print 'whoami',b.who_am_i()
+    print 'linux_arch',b.get_linux_arch()
+    print 'linux_distro',b.get_linux_distro()
+    print 'list dir',b.list_dir_objects('a')
+
     uno = a.search_in_repo(pack)
     if uno:
         print pack,' present in repo'
