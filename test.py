@@ -17,7 +17,18 @@ if __name__ == "__main__":
     #p0.wait()
     #print p2
     #print p0.wait()
+
+    pack='vimsdf'
     a = apyt()
-    print a.search_in_repo('nano')
-    print a.check_if_deb_is_installed('nano')
-    print a.search_in_repo('flash')
+    uno = a.search_in_repo(pack)
+    if uno:
+        print pack,' present in repo'
+    else:
+        print pack,' is not present in repo'
+    due = a.check_if_deb_is_installed(pack)
+    if due == True:
+        print pack,' is installed'
+    elif due == 'Half':
+        print pack,' has been removed but config files exist'
+    else:
+        print pack,' is not installed'

@@ -10,26 +10,29 @@ class LinuxOsUtils():
         pass
 
     def who_am_i(self):
+    '''check if user is root or not'''
         if getuid() != 0:
-            print 'process started from non root user'
             return False
         else:
             return True
 
     def get_linux_distro(self):
+    '''get Linux distribution code'''
         return linux_distribution()
 
     def get_linux_arch(self):
+    '''get Linux os architecture'''
         return architecture()
 
     def file_exists(self,obj):
+    '''check if a file exist'''
         if path.isfile(obj):
             return True
         else:
-            print 'File not found'
             return False
 
     def list_dir_objects(self,folder):
+    '''list objects in a folder'''
         try:
             dir_obj = listdir(folder)
         except OSError as err:
@@ -38,6 +41,7 @@ class LinuxOsUtils():
         return dir_obj
 
     def add_repo(repofile,repo):
+    '''add a linux APT reportsitory'''
         if self.file_exists(repofile):
             try:
                 with open(repofile, 'r') as configfile:
@@ -59,4 +63,5 @@ class LinuxOsUtils():
                 print error
 
     def add_apt_key(keyserver,key):
+    '''add an APT gpg key from from keyservers'''
         return Command('/usr/bin/apt-key adv --keyserver {} --recv-keys {}'.format(keyserver,key)).run()

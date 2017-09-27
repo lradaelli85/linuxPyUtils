@@ -11,12 +11,27 @@ class apyt():
         pass
 
     def search_in_repo(self,package):
-        '''Search for the exact package match in repo (Debian based distro)'''
-        return Command("/usr/bin/apt-cache search -n -q {} |awk '($1==\"{}\")'|wc -l".format(package,package)).run(OnlyOutPut=True)
+        '''Search for the exact package match in repo (Debian based distro)
+           return False if is not in repo,or True if it is.
+        '''
+        is_in_repo = Command("/usr/bin/apt-cache search -n -q {} |awk '($1==\"{}\")'|wc -l".format(package,package)).run(OnlyOutPut=True)
+        if int(is_in_repo) == 0:
+            return False
+        else:
+            return True
 
     def check_if_deb_is_installed(self,package):
-        '''Search if a package is installed (Debian based distro)'''
-        return Command("/usr/bin/dpkg-query -W -f='${Status}' %s" %package).run(OnlyOutPut=True)
+        '''Search if a package is installed (Debian based distro)
+           return True if it is installed,False if it is not installed and Half
+           if it has been removed but configuration file exist
+        '''
+        is_installed = Command("/usr/bin/dpkg-query -W -f='${Status}' %s" %package).run(OnlyOutPut=True)
+        if "install ok installed" in is_installed:
+            return True
+        elif "deinstall ok config-files" in is_installed:
+            return 'Half'
+        else:
+            return False
 
     def inst_from_repo(self,package):
         '''Install a package from Linux repo (Debian based distro)'''
