@@ -65,6 +65,8 @@ class apyt():
                             inst_a_deb(package)
                 else:
                     print 'empty folder'
+        else:
+            print 'need root privilage'            
 
     def check_deb_dependencies(self,package):
         '''check dependencies of a .deb package'''

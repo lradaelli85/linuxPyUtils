@@ -73,6 +73,17 @@ class LinuxOsUtils():
         '''add an APT gpg key from from keyservers'''
         return Command('/usr/bin/apt-key adv --keyserver {} --recv-keys {}'.format(keyserver,key)).run()
 
+    def show_apt_repo(self):
+        '''list all repo present on system'''
+        def_apt_file = '/etc/apt/sources.list'
+        apt_repo_folder = '/etc/apt/sources.list.d/'
+        print Command('grep deb {} |grep -v "^#"'.format(def_apt_file)).run(OnlyOutPut=True)
+        files = self.list_dir_objects(apt_repo_folder)
+        for f in files:
+            if '.list' in f:
+                print Command('grep deb {} |grep -v "^#"'.format(apt_repo_folder+f)).run(OnlyOutPut=True)
+
+
     def search_in_file(self,pattern,file_path):
         '''search for a pattern in a file
            return True if pattern is found otherwise return False.
