@@ -51,11 +51,13 @@ class LinuxOsUtils():
         '''add a linux APT reportsitory'''
         if self.file_exists(repofile):
             try:
+                #read the file
                 with open(repofile, 'r') as configfile:
                     if repo in configfile.read():
                         print "repository already present"
                     else:
                         try:
+                            #Append to the end of the file
                             with open(repofile, 'ab') as configfile:
                                 configfile.write(repo)
                         except IOError as error:
@@ -64,6 +66,7 @@ class LinuxOsUtils():
                 print error
         else:
             try:
+                #write a new file
                 with open(repofile, 'w') as configfile:
                     configfile.write(repo)
             except IOError as error:
