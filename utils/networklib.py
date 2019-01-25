@@ -145,12 +145,15 @@ class networklib():
 
 
     def usable_ip_range(self,address_cidr):
-        first_usable_ip = self.get_network_addr(address_cidr)
-        last_usable_ip = self.get_broadcast_addr(address_cidr)
-        hosts = {"first_ip" : first_usable_ip , "last_ip" : last_usable_ip}
-        hosts["first_ip"][3] += 1
-        hosts["last_ip"][3] -= 1
-        return hosts
+        net_addr = self.get_network_addr(address_cidr)
+        net_addr[3] = net_addr[3]+1
+        broad_addr = self.get_broadcast_addr(address_cidr)
+        broad_addr[3] = broad_addr[3]-1
+        net_size = address_cidr.split("/")[1]
+        if int(net_size) >= 0 and int(net_size) < 31:
+            usable_ips = {"first_usable_ip":net_addr, "last_usable_ip":broad_addr}
+#            print ".".join(map(str, usable_ips["first_usable_ip"])),"-",".".join(map(str, usable_ips["last_usable_ip"]))
+            return usable_ips
 
 
     def usable_ips(self,address_cidr):
