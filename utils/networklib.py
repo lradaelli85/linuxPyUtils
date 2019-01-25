@@ -4,6 +4,7 @@
 import socket
 import sys
 from os import listdir
+import socket, struct, fcntl
 from math import pow
 
 class networklib():
@@ -166,7 +167,6 @@ class networklib():
 
 
     def get_nic_ip(self,interface):
-        import socket, struct, fcntl
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sockfd = sock.fileno()
         SIOCGIFADDR = 0x8915
@@ -175,5 +175,5 @@ class networklib():
             res = fcntl.ioctl(sockfd, SIOCGIFADDR, ifreq)
         except:
             return None
-        ip = struct.unpack('16sH2x4s8x', res)[2]
-        return socket.inet_ntoa(ip)
+        ip_address = struct.unpack('16sH2x4s8x', res)[2]
+        return socket.inet_ntoa(ip_address)
