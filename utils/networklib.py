@@ -156,7 +156,7 @@ class networklib():
             return usable_ips
 
 
-    def usable_ips(self,address_cidr):
+    def number_of_usable_ips(self,address_cidr):
         cidr = int(address_cidr.split("/")[1])
         return str(pow(2,32-cidr)-2).split('.')[0]
 
