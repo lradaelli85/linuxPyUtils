@@ -20,6 +20,10 @@ class networklib():
                 return False
 
 
+    def get_cidr_from_bin(self,mask):
+        return self.ip_to_bin(mask).count('1')
+
+
     def is_valid_cidr(self,address):
         if not address.split('/')[1].isdigit():
             return False
@@ -180,3 +184,17 @@ class networklib():
             return None
         ip_address = struct.unpack('16sH2x4s8x', res)[2]
         return socket.inet_ntoa(ip_address)
+
+
+    def get_nic_mask(self,interface):
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x891b, struct.pack('256s',interface))[20:24])
+
+    
+    def get_nic_net_addr(self,interface):
+        addr = self.get_nic_ip(interface).split('.')
+        mask = self.get_nic_mask(interface).split('.')
+        nic_net_addr = []
+        for i in range(4):
+            nic_net_addr.append(int(addr[i]) & int(mask[i]))
+        return nic_net_addr
